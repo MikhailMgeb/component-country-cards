@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
 
 import Form from 'react-bootstrap/Form';
 
@@ -17,7 +17,7 @@ const CountrySelect: FC<CountrySelectProps> = ({ countries, onSelectCountry }) =
     }
 
     return (
-        <div className={cnCountrySelect()}> 
+        <div className={cnCountrySelect()}>
             <label className={cnCountrySelect('Label')}>Выбери название страны</label>
             <Form.Select aria-label="Default select example" onChange={handleChangeNameCountry}>
                 {countries.map((country: string, index: number) =>
