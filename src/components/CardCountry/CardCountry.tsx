@@ -14,29 +14,34 @@ type CardCountryProps = {
 
 const CardCountry: FC<CardCountryProps> = ({ selectedCountry }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [countries, setCountries] = useState<CountryInfo>();
+    const [country, setCountry] = useState<CountryInfo>();
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
         fetch(`https://restcountries.com/v3.1/name/${selectedCountry}`)
             .then(response => response.json())
             .then((dataCountry: ResponseCountryInfo[]) => {
-                setCountries(dataCountry[0]);
-                setIsLoading(true);
+                setCountry(dataCountry[0]);
             })
-            .finally()
-            .catch(error => console.log(error))
+            .finally(() => setIsLoading(true))
+            .catch(error => setError(error))
     }, [selectedCountry]);
+
+    if (error) {
+        return <div>Произошла ошибка: {error}</div>;
+    }
 
     return (
         <div className={cnCardCountry()}>
+            {error ? <p></p> : null}
             {isLoading ?
                 <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src={countries?.flags.png} />
+                    <Card.Img variant="top" src={country?.flags.png} />
                     <Card.Body>
-                        <Card.Title>{countries?.name.common}</Card.Title>
+                        <Card.Title>{country?.name.common}</Card.Title>
                         <Card.Text>
-                            {countries?.capital}
+                            {country?.capital}
                         </Card.Text>
                     </Card.Body>
                 </Card> :
